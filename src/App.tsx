@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowDown, ArrowRight, ArrowUpRight, ChevronDown, Code2, Cpu, Github, Globe2, Linkedin, Mail, Menu, Network, ShieldCheck, Terminal, X } from 'lucide-react';
 import { contact, labs, projects, skillGroups } from './portfolio';
 import IntroSplash from './components/IntroSplash';

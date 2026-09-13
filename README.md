@@ -1,4 +1,4 @@
-﻿# Christian Jade Villaver — Portfolio
+# Christian Jade Villaver — Portfolio
 
 A responsive React + TypeScript portfolio for an early-career Computer Engineering professional with a Bachelor of Science in Computer Engineering from the University of Cebu. Content emphasizes IT support, networking, software development, embedded systems, and IoT. Infrastructure and cybersecurity are presented as areas of continued development.
 

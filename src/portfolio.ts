@@ -1,4 +1,4 @@
-﻿export const contact = { email: "", github: "", linkedin: "" };
+export const contact = { email: "", github: "", linkedin: "" };
 
 type Project = {
   title: string;
