@@ -1,177 +1,66 @@
-import { useState } from 'react';
-import {
-  ArrowUpRight,
-  ChevronRight,
-  ExternalLink,
-  Github,
-  Linkedin,
-  Mail,
-  Menu,
-  X,
-} from 'lucide-react';
+﻿import { useEffect, useState } from 'react';
+import { ArrowDown, ArrowRight, ArrowUpRight, ChevronDown, Code2, Cpu, Github, Globe2, Linkedin, Mail, Menu, Network, ShieldCheck, Terminal, X } from 'lucide-react';
+import { contact, labs, projects, skillGroups } from './portfolio';
+import IntroSplash from './components/IntroSplash';
 
-type Project = {
-  year: string;
-  title: string;
-  category: string;
-  description: string;
-  tags: string[];
-  status: string;
-  featured?: boolean;
-};
-
-type Lab = {
-  category: string;
-  date: string;
-  title: string;
-  description: string;
-  tools: string;
-};
-
-const projects: Project[] = [
-  {
-    year: '2025',
-    title: 'Cybersecurity Project',
-    category: 'SECURITY / PLACEHOLDER',
-    description: 'A placeholder for a security-focused project, including the problem, approach, and what you learned while building it.',
-    tags: ['REPLACE_ME', 'SECURITY', 'DOCUMENTATION'],
-    status: 'IN PROGRESS',
-    featured: true,
-  },
-  {
-    year: '2025',
-    title: 'Network Engineering Project',
-    category: 'NETWORKING / PLACEHOLDER',
-    description: 'A placeholder for a network design, configuration, or troubleshooting project you want employers to explore.',
-    tags: ['TCP/IP', 'REPLACE_ME', 'NETWORKING'],
-    status: 'PLANNING',
-  },
-  {
-    year: '2025',
-    title: 'Software Development Project',
-    category: 'SOFTWARE / PLACEHOLDER',
-    description: 'A placeholder for a practical application that demonstrates your problem-solving and software development process.',
-    tags: ['CODE', 'REPLACE_ME', 'BUILD'],
-    status: 'PLANNING',
-  },
-  {
-    year: '2025',
-    title: 'Computer Engineering Thesis',
-    category: 'ENGINEERING / PLACEHOLDER',
-    description: 'A placeholder for your thesis or capstone work. Add the research question, system, and final outcome here.',
-    tags: ['THESIS', 'RESEARCH', 'REPLACE_ME'],
-    status: 'ARCHIVED',
-  },
-];
-
-const labs: Lab[] = [
-  { category: 'NETWORKING', date: 'DATE TBD', title: 'Network Security Lab', description: 'Add a short summary of a network security experiment or configuration exercise.', tools: 'TOOLS TO BE ADDED' },
-  { category: 'CISCO', date: 'DATE TBD', title: 'Cisco Networking Lab', description: 'Add notes from routing, switching, VLAN, or troubleshooting practice.', tools: 'TOOLS TO BE ADDED' },
-  { category: 'LINUX', date: 'DATE TBD', title: 'Linux Lab', description: 'Add a practical Linux administration, scripting, or hardening exercise.', tools: 'TOOLS TO BE ADDED' },
-  { category: 'WEB SECURITY', date: 'DATE TBD', title: 'Web Security Lab', description: 'Add an observation from a safe, authorized web security learning exercise.', tools: 'TOOLS TO BE ADDED' },
-  { category: 'SYSTEMS', date: 'DATE TBD', title: 'System Administration Lab', description: 'Add a systems setup, service management, or troubleshooting walkthrough.', tools: 'TOOLS TO BE ADDED' },
-  { category: 'SECURITY', date: 'DATE TBD', title: 'CTF / Security Exercise', description: 'Add a write-up when you are ready to share a challenge and what it taught you.', tools: 'TOOLS TO BE ADDED' },
-];
-
-const skillGroups = [
-  ['CYBERSECURITY', ['Security fundamentals', 'Web security', 'Threat awareness', 'REPLACE_ME']],
-  ['NETWORKING', ['TCP/IP', 'Routing', 'Switching', 'Network troubleshooting']],
-  ['PROGRAMMING', ['Python', 'REPLACE_ME', 'Scripting', 'Problem solving']],
-  ['OPERATING SYSTEMS', ['Linux', 'Windows', 'System administration', 'REPLACE_ME']],
-  ['DEVELOPMENT', ['Git', 'Web development', 'APIs', 'REPLACE_ME']],
-  ['HARDWARE & SYSTEMS', ['Computer architecture', 'Hardware troubleshooting', 'REPLACE_ME']],
-] as const;
-
-const scrollTo = (id: string): void => {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-};
-
-function SectionLabel({ children }: { children: string }) {
-  return <p className="section-label"><span>+</span> {children}</p>;
-}
-
-function StatusPill({ children }: { children: string }) {
-  return <span className="status-pill"><span className="status-dot" />{children}</span>;
+const navigation = ['about', 'projects', 'labs', 'skills', 'contact'];
+const categories = ['Embedded & IoT', 'Software', 'Networking', 'Academic'];
+const icons = [ShieldCheck, Network, Code2, Cpu];
+function Label({ number, children }: { number: string; children: string }) {
+  return <p className="section-label"><span>{number} /</span> {children}</p>;
 }
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [filter, setFilter] = useState('All');
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]) setActiveSection(visible[0].target.id);
+    }, { rootMargin: '-15% 0px -45% 0px', threshold: [0, 0.2, 0.5] });
+    document.querySelectorAll('main > section[id]').forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        document.getElementById('menu-toggle')?.focus();
+      }
+    };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, [menuOpen]);
 
-  const navigate = (id: string): void => {
-    setActiveSection(id);
-    setMenuOpen(false);
-    scrollTo(id);
-  };
-
-  return (
-    <div className="site-shell">
-      <header className="topbar">
-        <a className="brand" href="#home" onClick={() => navigate('home')} aria-label="Avery Santos home">
-          <span className="brand-mark">AS</span><span className="brand-name">AVERY SANTOS</span>
-        </a>
-        <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Main navigation">
-          {['home', 'about', 'projects', 'labs', 'skills', 'certifications', 'contact'].map((item) => (
-            <button className={activeSection === item ? 'nav-link active' : 'nav-link'} key={item} onClick={() => navigate(item)}>{item.toUpperCase()}</button>
-          ))}
-        </nav>
-        <div className="top-actions">
-          <a href="https://github.com" aria-label="GitHub" target="_blank" rel="noreferrer"><Github size={14} /></a>
-          <a href="https://linkedin.com" aria-label="LinkedIn" target="_blank" rel="noreferrer"><Linkedin size={14} /></a>
-          <a href="mailto:hello@example.com" aria-label="Email"><Mail size={14} /></a>
-          <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'}>{menuOpen ? <X size={18} /> : <Menu size={18} />}</button>
-        </div>
-      </header>
-
-      <main>
-        <section id="home" className="hero section-wrap">
-          <div className="hero-copy">
-            <SectionLabel> SYSTEM_PROFILE // COMPUTER_ENGINEERING </SectionLabel>
-            <h1>Engineering <span>secure</span><br />digital systems.</h1>
-            <p className="hero-intro">I&apos;m a Computer Engineering graduate interested in cybersecurity, networking, systems, and software development. I enjoy understanding how technologies work, securing them, and building practical solutions.</p>
-            <div className="button-row">
-              <button className="button primary" onClick={() => navigate('projects')}>VIEW PROJECTS <ChevronRight size={15} /></button>
-              <button className="button secondary" onClick={() => navigate('about')}>ABOUT ME</button>
-            </div>
-            <div className="hero-meta"><span>LOCATION // PHILIPPINES</span><span>STATUS // <b>OPEN_TO_WORK</b></span></div>
-          </div>
-          <div className="terminal profile-terminal">
-            <div className="terminal-bar"><div className="window-dots"><i /><i /><i /></div><span>terminal://profile</span><span className="terminal-live">● LIVE</span></div>
-            <div className="terminal-body">
-              <div className="ascii-name" aria-label="AS initials">A S</div>
-              <div className="terminal-line"><span>&gt; whoami</span></div>
-              <div className="terminal-output">role: computer engineering graduate<br />focus: cybersecurity &amp; networking<br />status: open_to_work<br />location: philippines</div>
-              <div className="terminal-line"><span>&gt; interests</span></div>
-              <div className="terminal-output">network_security<br />linux<br />systems<br />web_security<br />automation</div>
-              <div className="terminal-line cursor-line"><span>&gt; <i className="cursor" /></span></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="about" className="section-wrap about-section">
-          <SectionLabel>PROFILE</SectionLabel><h2>About <span>Me</span></h2>
-          <div className="about-grid"><div className="about-copy"><p className="lead">A curious engineer with a security-first mindset and a practical approach to learning.</p><p>I&apos;m building my foundation across cybersecurity, networking, systems, and software development through projects, labs, certifications, and hands-on practice. My goal is to join a technical team where I can contribute thoughtfully, learn from experienced people, and grow through real-world work.</p><p className="muted">This portfolio is a working record of the systems I&apos;m learning to understand, build, and protect.</p></div><div className="info-grid"><div><span>EDUCATION</span><strong>B.S. Computer Engineering</strong></div><div><span>PRIMARY INTERESTS</span><strong>Security · Networks · Systems</strong></div><div><span>LOCATION</span><strong>Philippines</strong></div><div><span>AVAILABILITY</span><strong className="green-text">Open to work</strong></div></div></div>
-          <div className="learning"><span className="micro-label">CURRENTLY LEARNING</span><div className="tag-row">{['Linux', 'Network Security', 'Cybersecurity', 'Cloud', 'Python', 'Web Security'].map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div></div>
-        </section>
-
-        <section id="projects" className="section-wrap projects-section"><div className="section-heading"><div><SectionLabel>ARTIFACTS</SectionLabel><h2>Selected <span>Projects</span></h2><p>Hands-on projects exploring software, systems, networking, and security.</p></div><span className="count-label">04 / PLACEHOLDERS</span></div><div className="project-grid">{projects.map((project) => <article className={project.featured ? 'project-card featured' : 'project-card'} key={project.title}><div className="card-top"><span>{project.year} · {project.category}</span><StatusPill>{project.status}</StatusPill></div><h3>{project.title}</h3><p>{project.description}</p><div className="tag-row">{project.tags.map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div><div className="card-links"><a href="https://github.com" target="_blank" rel="noreferrer">GITHUB <ExternalLink size={12} /></a><a href="#contact">CASE STUDY <ArrowUpRight size={12} /></a></div></article>)}</div></section>
-
-        <section id="labs" className="section-wrap labs-section"><SectionLabel>FIELD NOTES</SectionLabel><h2>Cybersecurity &amp; <span>Networking Labs</span></h2><p className="section-subtitle">Hands-on experiments, configurations, observations, and technical exercises.</p><div className="lab-grid">{labs.map((lab) => <article className="lab-card" key={lab.title}><div className="card-top"><span>{lab.category}</span><span>{lab.date}</span></div><h3>{lab.title}</h3><p>{lab.description}</p><div className="lab-footer"><span>TOOLS // {lab.tools}</span><button onClick={() => navigate('contact')}>READ LAB <ChevronRight size={13} /></button></div></article>)}</div></section>
-
-        <section id="skills" className="section-wrap skills-section"><SectionLabel>TOOLKIT</SectionLabel><h2>Technical <span>Skills</span></h2><p className="section-subtitle">A growing toolkit, documented honestly and expanded through practice.</p><div className="skills-grid">{skillGroups.map(([group, skills]) => <div className="skill-group" key={group}><div className="skill-heading"><span>$</span> {group.toLowerCase()}</div>{skills.map((skill) => <span className="skill-chip" key={skill}>{skill}</span>)}</div>)}</div></section>
-
-        <section id="certifications" className="section-wrap credentials-section"><div className="section-heading"><div><SectionLabel>CREDENTIALS</SectionLabel><h2>Certifications &amp; <span>Training</span></h2></div><span className="count-label">VERIFICATION READY</span></div><div className="credential-card"><div className="credential-icon">01</div><div><span className="micro-label">CERTIFICATION NAME / PLACEHOLDER</span><h3>Add your certification here</h3><p>Issuer / Training provider · Date to be added</p></div><div className="credential-status"><StatusPill>TO BE ADDED</StatusPill><button onClick={() => navigate('contact')}>VERIFY CREDENTIAL <ArrowUpRight size={12} /></button></div></div></section>
-
-        <section id="education" className="section-wrap education-section"><SectionLabel>BACKGROUND</SectionLabel><h2>Education</h2><div className="timeline-item"><div className="timeline-marker" /><div className="timeline-date">GRADUATION YEAR TBD</div><div><h3>Bachelor of Science in Computer Engineering</h3><p className="green-text">[University Name]</p><p className="muted">Relevant coursework, awards, academic organizations, and thesis details can be added here.</p></div></div></section>
-
-        <section id="workbench" className="section-wrap workbench-section"><SectionLabel>WORK IN PROGRESS</SectionLabel><h2>Workbench</h2><p className="section-subtitle">What I&apos;m currently learning, building, and improving.</p><div className="terminal workbench-terminal"><div className="terminal-bar"><div className="window-dots"><i /><i /><i /></div><span>~/workbench/active</span><span className="terminal-live">3 LIVE</span></div><div className="workbench-lines">{[['cybersecurity-labs', 'Building hands-on security exercises.', 'LEARNING'], ['portfolio', 'Creating my professional portfolio.', 'BUILDING'], ['networking-review', 'Practicing routing, switching, and network fundamentals.', 'LEARNING']].map(([name, desc, status]) => <div className="work-line" key={name}><span className="line-number">0{['cybersecurity-labs', 'portfolio', 'networking-review'].indexOf(name) + 1}</span><div><strong>$ {name}</strong><p>{desc}</p></div><StatusPill>{status}</StatusPill></div>)}<div className="terminal-line"><span>&gt; git status --short <i className="cursor" /></span></div></div></div></section>
-
-        <section id="contact" className="section-wrap contact-section"><div><SectionLabel>CONNECT</SectionLabel><h2>Let&apos;s build something<br /><span>secure together.</span></h2><p>I&apos;m currently open to entry-level opportunities where I can continue learning, contribute to technical teams, and grow as an engineer.</p><a className="button primary" href="mailto:hello@example.com">SEND A MESSAGE <ChevronRight size={15} /></a></div><div className="contact-list"><span>FIND ME ELSEWHERE</span><a href="https://github.com" target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={13} /></a><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight size={13} /></a><a href="mailto:hello@example.com">hello@example.com <ArrowUpRight size={13} /></a></div></section>
-      </main>
-
-      <footer className="footer"><StatusPill>OPEN_TO_WORK</StatusPill><div className="footer-links"><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a><a href="mailto:hello@example.com">Email</a></div><span>© 2025 AVERY SANTOS · BUILT WITH CURIOSITY &amp; CAFFEINE</span></footer>
-    </div>
-  );
+  return <div className="site-shell">
+    <IntroSplash name="Christian Jade Villaver" />
+    <a className="skip-link" href="#main">Skip to content</a>
+    <header className="topbar">
+      <a className="brand" href="#home" onClick={() => setMenuOpen(false)} aria-label="Christian Jade Villaver home"><span className="brand-mark">cj<span>.</span></span><span>CHRISTIAN JADE<br /><small>VILLAVER / CPE PROFESSIONAL</small></span></a>
+      <nav id="main-navigation" className={`nav-links ${menuOpen ? 'open' : ''}`} aria-label="Main navigation">{navigation.map((item) => <a key={item} href={`#${item}`} className={activeSection === item ? 'active' : ''} aria-current={activeSection === item ? 'location' : undefined} onClick={() => setMenuOpen(false)}>{item === 'labs' ? 'Experience' : item}</a>)}</nav>
+      <a href="#contact" className="header-contact">Let’s connect <ArrowUpRight size={15} /></a>
+      <button id="menu-toggle" className="menu-toggle" aria-expanded={menuOpen} aria-controls="main-navigation" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
+    </header>
+    <main id="main">
+      <section id="home" className="hero section-wrap">
+        <div className="hero-copy"><p className="eyebrow"><span className="status-dot" /> OPEN TO OPPORTUNITIES</p><p className="hero-name">COMPUTER ENGINEERING PROFESSIONAL</p><h1>Understand.<br />Build.<br /><span>Secure.</span></h1><p className="hero-intro">Hands-on experience across <strong>IT support, networking, software development, embedded systems, and IoT,</strong> with a growing focus on infrastructure, cybersecurity, and practical technology solutions.<br /><small>In a world full of the common, dare to be uncommon.</small></p><div className="button-row"><a className="button primary" href="#projects">Explore my work <ArrowUpRight size={18} /></a><a className="text-link" href="#about">A little about me <ArrowRight size={16} /></a></div><div className="hero-meta"><span><Globe2 size={14} /> BASED IN THE PHILIPPINES</span><span>BS COMPUTER ENGINEERING</span></div></div>
+        <div className="hero-visual"><div className="visual-caption"><span>FIG. 01 — A CONNECTED MINDSET</span><span className="green-text">SYSTEM ONLINE <span className="status-dot" /></span></div><div className="network-diagram" role="img" aria-label="Computer Engineering connects IT support, networking, software development, embedded systems, and IoT."><div className="orbit orbit-outer" /><div className="orbit orbit-inner" /><div className="diagram-axis horizontal" /><div className="diagram-axis vertical" /><svg className="network-lines" viewBox="0 0 500 420" aria-hidden="true"><path d="M250 70 L250 210 L80 210 M250 210 L420 210 M250 210 L250 350" /><circle cx="250" cy="135" r="3" /><circle cx="335" cy="210" r="3" /><circle cx="165" cy="210" r="3" /><circle cx="250" cy="285" r="3" /></svg><div className="core-node"><Cpu size={35} strokeWidth={1.3} /><strong>CJ<span>_</span></strong><small>CPE PROFESSIONAL</small></div><div className="network-node node-top"><ShieldCheck size={20} /><span>IOT</span></div><div className="network-node node-left"><Network size={20} /><span>NETWORKS</span></div><div className="network-node node-right"><Code2 size={20} /><span>SOFTWARE</span></div><div className="network-node node-bottom"><Terminal size={20} /><span>EMBEDDED</span></div><span className="diagram-coordinate">UNDERSTAND END TO END.<br />BUILD PRACTICAL SOLUTIONS.</span><span className="diagram-version">PROFILE v.01</span></div><div className="terminal"><div className="terminal-bar"><span><i /><i /><i /></span><span>christian@portfolio: ~</span><Terminal size={13} /></div><div className="terminal-body"><p><span>❯</span> cat mindset.txt</p><p className="terminal-output">Understand systems end to end.<br />Keep learning. Build practical technology.</p><p><span>❯</span> <i className="cursor" /></p></div></div></div>
+        <div className="hero-bottom"><a href="#about"><ArrowDown size={14} /> SCROLL TO EXPLORE</a><span>ALWAYS LEARNING. ALWAYS ITERATING.</span></div>
+      </section>
+      <div className="focus-strip"><div className="section-wrap"><span>AREAS OF FOCUS</span><p><ShieldCheck /> Embedded &amp; IoT</p><i>+</i><p><Network /> Networking</p><i>+</i><p><Terminal /> IT support</p><i>+</i><p><Code2 /> Software</p></div></div>
+      <section id="about" className="section-wrap about-section"><div><Label number="01">THE PERSON BEHIND THE TERMINAL</Label><h2>Computer Engineering professional<br /><span>focused on practical technology.</span></h2></div><div className="about-copy"><p className="lead">I am a Computer Engineering professional with hands-on exposure to IT support, networking, software development, embedded systems, and Internet of Things technologies.</p><p>My experience includes working as an IT Assistant during my On-the-Job Training, where I gained practical exposure to real workplace IT environments and strengthened my troubleshooting, technical support, communication, and problem-solving skills.</p><p>My academic and technical projects have also allowed me to work across both hardware and software. I have worked with microcontrollers, sensors, wireless communication, web technologies, databases, and networking concepts while developing practical engineering solutions.</p><p>One of my current technical projects focuses on an Occupancy-Driven Plug for Adaptive Lighting and Appliance Control, integrating technologies such as ESP8266, ESP32-C3, occupancy and ambient-light sensors, ESP-NOW communication, and mobile-based monitoring and control. The project reflects my interest in IoT, automation, embedded systems, and practical energy-management solutions.</p><p>I am continuing to develop my skills in networking, IT infrastructure, cybersecurity, software development, and emerging technologies. My goal is to build a career where I can apply my Computer Engineering background to practical IT and technology problems while continuously improving my technical capabilities.</p><div className="about-facts"><div><span>EDUCATION</span><strong>Bachelor of Science in Computer Engineering<br />University of Cebu</strong><p className="publication-note">Relevant coursework and thesis/research: details to be added. Academic projects are listed below.</p></div><div><span>NEXT CHAPTER</span><strong><span className="status-dot" /> Open to entry-level roles</strong></div></div></div></section>
+      <section id="projects" className="section-wrap"><div className="section-heading"><div><Label number="02">THE WORKBENCH</Label><h2>Ideas into <span>practice.</span></h2></div><p>Hardware, software, and networking projects.<br />Additional academic work: details to be added.</p></div><div className="project-toolbar"><div className="filters" role="group" aria-label="Filter projects">{['All', ...categories].map((category) => <button key={category} aria-pressed={filter === category} onClick={() => setFilter(category)} className={filter === category ? 'selected' : ''}>{category}{category === 'All' && <span>04</span>}</button>)}</div><span className="micro-label" aria-live="polite">{filter === 'All' ? '04' : '01'} WORK &amp; LEARNING AREAS</span></div><div className="project-grid">{projects.map((project, index) => {
+        const Icon = icons[index];
+        if (filter !== 'All' && filter !== categories[index]) return null;
+        return <article className="project-card" key={project.title}><div className={`project-art art-${index}`} aria-hidden="true"><div className="art-grid" /><span className="art-id">CJ / 0{index + 1}</span><div className="art-symbol"><Icon size={45} strokeWidth={1} /></div><span className="art-label">{['CONNECTED DEVICES', 'WEB-BASED MANAGEMENT', 'BUILDING FOUNDATIONS', 'ACADEMIC PROJECT PLACEHOLDER'][index]}</span><span className="art-corner">+</span></div><div className="project-content"><div className="card-top"><span>{project.category}</span><span className={`project-status ${project.status === 'IN PROGRESS' ? 'in-progress' : ''}`}><span />{project.status === 'ARCHIVED' ? 'DOCUMENTATION PENDING' : project.status}</span></div><h3>{project.title}</h3><p>{project.description}</p><div className="tag-row">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><details className="project-details"><summary>Scope &amp; context <ChevronDown size={16} /></summary><div><p>{project.scope}</p><p className="publication-note">{project.status === 'PLACEHOLDER' ? 'Placeholder — project information not yet provided.' : 'Practical projects and continued technical learning.'}</p></div></details></div></article>;
+      })}</div></section>
+      <section id="labs" className="section-wrap"><div className="section-heading"><div><Label number="03">EXPERIENCE &amp; LEARNING</Label><h2>Across disciplines.<br /><span>Deeper understanding.</span></h2></div><p>IT support experience and ongoing projects.<br />Networking and cybersecurity skills in development.</p></div><div className="lab-list">{labs.map((lab, index) => <details className="lab-row" key={lab.title}><summary><span className="lab-number">0{index + 1}</span><span className="lab-title">{lab.title}<small>{lab.category}</small></span><span className="lab-state">{lab.status}</span><ChevronDown size={19} /></summary><div className="lab-description"><p>{lab.description}</p>{lab.responsibilities && <ul>{lab.responsibilities.map((responsibility) => <li key={responsibility}>• {responsibility}</li>)}</ul>}<span>FOCUS / {lab.tools}</span><p className="publication-note">Part of my ongoing technical development.</p></div></details>)}</div></section>
+      <section id="skills" className="section-wrap"><div className="section-heading"><div><Label number="04">TOOLS OF THE TRADE</Label><h2>A growing <span>toolkit.</span></h2></div><p>Hands-on technical exposure, with networking<br />and cybersecurity foundations in development.</p></div><div className="skills-grid">{skillGroups.map(([group, skills], index) => <div className="skill-group" key={group}><span className="skill-index">0{index + 1} /</span><h3>{group}</h3><div>{skills.map((skill) => <span className="skill-chip" key={skill}>{skill}</span>)}</div></div>)}</div><div className="learning-line"><span className="status-dot" /><span>CURRENTLY EXPLORING</span><p>Networking &amp; IT infrastructure <b>/</b> Cybersecurity <b>/</b> Software <b>/</b> Embedded systems &amp; IoT <b>/</b> Emerging technologies</p></div></section>
+      <section id="contact" className="section-wrap contact-section"><div><Label number="05">WHAT’S NEXT?</Label><h2>Let’s build<br /><span>practical technology.</span></h2><p>I’m currently open to entry-level opportunities where I can apply my Computer Engineering background, contribute to technical teams, and continue developing my skills across IT, networking, software, embedded systems, and cybersecurity.</p>{contact.email ? <a className="button primary" href={`mailto:${contact.email}`}>Let’s talk <ArrowUpRight size={18} /></a> : <p className="contact-pending"><Mail size={17} /> Contact details will be available here soon.</p>}</div><div className="contact-aside"><span className="availability"><span className="status-dot" /> OPEN TO WORK</span><p>Based in the Philippines.<br />Ready for the next challenge.</p><div className="social-links">{contact.github && <a href={contact.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub <ArrowUpRight size={16} /></a>}{contact.linkedin && <a href={contact.linkedin} target="_blank" rel="noreferrer"><Linkedin size={18} /> LinkedIn <ArrowUpRight size={16} /></a>}</div></div></section>
+    </main>
+    <footer className="footer section-wrap"><a className="brand-mark" href="#home" aria-label="Back to top">cj<span>.</span></a><span>© {new Date().getFullYear()} Christian Jade Villaver</span><span>BUILT WITH CURIOSITY & PURPOSE</span><a href="#home">Back to top <ArrowUpRight size={14} /></a></footer>
+  </div>;
 }
-
 export default App;
