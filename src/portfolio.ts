@@ -24,16 +24,8 @@ export const projects: Project[] = [
     category: 'IOT / EMBEDDED SYSTEMS',
     description: 'An IoT-based system designed to support adaptive lighting and appliance control using occupancy detection, ambient-light sensing, wireless communication, and mobile-based monitoring.',
     tags: ['ESP8266', 'ESP32-C3', 'ESP-NOW', 'OCCUPANCY SENSING', 'AMBIENT-LIGHT SENSING', 'IOT', 'AUTOMATION', 'MOBILE MONITORING', 'APPLIANCE CONTROL', 'ENERGY MANAGEMENT'],
-    status: 'IN PROGRESS',
-    scope: 'This ongoing project integrates microcontrollers, occupancy and ambient-light sensors, ESP-NOW communication, and mobile-based monitoring and control. It reflects my interest in embedded systems, IoT, automation, and practical energy-management solutions.',
-  },
-  {
-    title: 'QR Code Management System',
-    category: 'SOFTWARE DEVELOPMENT',
-    description: 'A web-based management system designed to support laboratory equipment borrowing, returns, reservations, and inventory management using QR-code technology.',
-    tags: ['REACT.JS', 'FIREBASE AUTHENTICATION', 'FIRESTORE', 'NODE.JS', 'QR-CODE APIS'],
-    status: 'STATUS TO BE CONFIRMED',
-    scope: 'The system uses React.js, Firebase Authentication, Firestore, Node.js, and QR-code APIs for laboratory equipment management. Completion status and project results: to be added once confirmed.',
+    status: 'COMPLETED',
+    scope: 'This completed project integrates microcontrollers, occupancy and ambient-light sensors, ESP-NOW communication, and mobile-based monitoring and control. It reflects my interest in embedded systems, IoT, automation, and practical energy-management solutions.',
   },
   {
     title: 'Networking & Cisco Learning',
@@ -42,14 +34,6 @@ export const projects: Project[] = [
     tags: ['CISCO', 'TCP/IP', 'ROUTING CONCEPTS', 'SWITCHING CONCEPTS', 'NETWORK FUNDAMENTALS'],
     status: 'LEARNING',
     scope: 'I am continuing to strengthen my foundation in networking, IT infrastructure, and cybersecurity through hands-on learning, Cisco networking experience, and continued technical study. Specific training and coursework details: to be added.',
-  },
-  {
-    title: 'Additional Computer Engineering / Academic Projects',
-    category: 'COMPUTER ENGINEERING / ACADEMIC',
-    description: 'Placeholder for additional Computer Engineering or academic projects. Confirmed project details will be added here.',
-    tags: ['DETAILS TO BE ADDED'],
-    status: 'PLACEHOLDER',
-    scope: 'Project title, scope, technologies, and outcomes: to be added once confirmed.',
   },
 ];
 
@@ -91,9 +75,9 @@ export const labs: Lab[] = [
   {
     category: 'EMBEDDED SYSTEMS & IOT',
     title: '$ iot-project',
-    description: 'Developing the Occupancy-Driven Plug for Adaptive Lighting and Appliance Control.',
+    description: 'Completed the Occupancy-Driven Plug for Adaptive Lighting and Appliance Control.',
     tools: 'ESP8266, ESP32-C3, sensors, ESP-NOW, automation, mobile monitoring and control',
-    status: 'BUILDING',
+    status: 'COMPLETED',
   },
   {
     category: 'DIGITAL TECHNOLOGIES',

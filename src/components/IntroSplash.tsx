@@ -4,7 +4,6 @@ type IntroSplashProps = {
   name: string;
   /** Total entrance, hold, and fade duration in milliseconds. */
   durationMs?: number;
-  sessionKey?: string;
 };
 
 const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
@@ -12,29 +11,13 @@ const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
 export default function IntroSplash({
   name,
   durationMs = 2100,
-  sessionKey = 'cj-portfolio:intro-seen',
 }: IntroSplashProps) {
-  const [visible, setVisible] = useState(() => {
-    if (typeof window === 'undefined' || window.matchMedia(reducedMotionQuery).matches) {
-      return false;
-    }
-
-    try {
-      return window.sessionStorage.getItem(sessionKey) !== 'seen';
-    } catch {
-      // Storage can be unavailable in private or restricted browsing contexts.
-      return true;
-    }
-  });
+  const [visible, setVisible] = useState(() =>
+    typeof window !== 'undefined' && !window.matchMedia(reducedMotionQuery).matches,
+  );
 
   useEffect(() => {
     if (!visible) return;
-
-    try {
-      window.sessionStorage.setItem(sessionKey, 'seen');
-    } catch {
-      // The intro still finishes normally when storage is unavailable.
-    }
 
     const dismiss = () => setVisible(false);
     // Also remove the element if CSS animations are disabled or interrupted.
@@ -56,7 +39,7 @@ export default function IntroSplash({
       interactionEvents.forEach((event) => window.removeEventListener(event, dismiss));
       motionPreference.removeEventListener('change', handleMotionChange);
     };
-  }, [visible, durationMs, sessionKey]);
+  }, [visible, durationMs]);
 
   if (!visible) return null;
 
