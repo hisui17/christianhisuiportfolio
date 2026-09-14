@@ -79,13 +79,6 @@ export const labs: Lab[] = [
     tools: 'ESP8266, ESP32-C3, sensors, ESP-NOW, automation, mobile monitoring and control',
     status: 'COMPLETED',
   },
-  {
-    category: 'DIGITAL TECHNOLOGIES',
-    title: 'Google Maps Contributions',
-    description: 'Hands-on contribution experience on Google Maps, reflecting my engagement with digital technologies.',
-    tools: 'Google Maps, digital contributions',
-    status: 'CONTRIBUTION EXPERIENCE',
-  },
 ];
 
 export const skillGroups = [
