@@ -89,3 +89,34 @@ export const skillGroups = [
   ['EMBEDDED SYSTEMS & IOT', ['ESP8266', 'ESP32-C3', 'Microcontrollers', 'Sensors', 'ESP-NOW', 'IoT', 'Automation']],
   ['PROFESSIONAL SKILLS', ['Problem solving', 'Technical communication', 'Troubleshooting', 'Continuous learning']],
 ] as const;
+
+export const certifications: {
+  title: string;
+  issuer: string;
+  issued: string;
+  issuedLabel: string;
+  badge: string;
+  credentialUrl?: string;
+}[] = [
+  {
+    title: 'CCNA: Enterprise Networking, Security, and Automation',
+    issuer: 'Cisco',
+    issued: '2026-08-24',
+    issuedLabel: 'August 2026',
+    badge: 'ccna-ensa.png',
+  },
+  {
+    title: 'CCNA: Introduction to Networks',
+    issuer: 'Cisco',
+    issued: '2026-08-19',
+    issuedLabel: 'August 2026',
+    badge: 'ccna-itn.png',
+  },
+  {
+    title: 'CCNA: Switching, Routing, and Wireless Essentials',
+    issuer: 'Cisco',
+    issued: '2026-08-24',
+    issuedLabel: 'August 2026',
+    badge: 'ccna-srwe.png',
+  },
+];
