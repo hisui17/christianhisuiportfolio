@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, ChevronDown, Code2, Cpu, Github, Globe2, Linkedin, Mail, Menu, Network, ShieldCheck, Terminal, X } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, ChevronDown, Code2, Github, Globe2, Linkedin, Mail, Menu, Network, ShieldCheck, Terminal, X } from 'lucide-react';
 import { certifications, contact, labs, projects, skillGroups } from './portfolio';
 import IntroSplash from './components/IntroSplash';
+import professionalPhoto from './assets/profile/professional-photo.png';
 
 const navigation = ['about', 'projects', 'labs', 'skills', 'certifications', 'contact'];
 const certificationBadges = import.meta.glob<string>('./assets/certifications/*.png', {
@@ -107,7 +108,9 @@ function App() {
     <main id="main">
       <section id="home" className="hero section-wrap">
         <div className="hero-copy"><p className="eyebrow"><span className="status-dot" /> OPEN TO OPPORTUNITIES</p><p className="hero-full-name">CHRISTIAN JADE H. VILLAVER</p><p className="hero-name">COMPUTER ENGINEERING PROFESSIONAL</p><h1>Understand.<br />Build.<br /><span>Secure.</span></h1><p className="hero-intro">Hands-on experience across <strong>IT support, networking, software development, embedded systems, and IoT,</strong> with a growing focus on infrastructure, cybersecurity, and practical technology solutions.<br /><small>In a world full of the common, dare to be uncommon.</small></p><div className="button-row"><a className="button primary" href="#projects">Explore my work <ArrowUpRight size={18} /></a><a className="text-link" href="#about">A little about me <ArrowRight size={16} /></a></div><div className="hero-meta"><span><Globe2 size={14} /> BASED IN THE PHILIPPINES</span><span>BS COMPUTER ENGINEERING</span></div></div>
-        <div className="hero-visual"><div className="visual-caption"><span>FIG. 01 — A CONNECTED MINDSET</span><span className="green-text">SYSTEM ONLINE <span className="status-dot" /></span></div><div className="network-diagram" role="img" aria-label="Computer Engineering connects IT support, networking, software development, embedded systems, and IoT."><div className="orbit orbit-outer" /><div className="orbit orbit-inner" /><div className="diagram-axis horizontal" /><div className="diagram-axis vertical" /><svg className="network-lines" viewBox="0 0 500 420" aria-hidden="true"><path d="M250 70 L250 210 L80 210 M250 210 L420 210 M250 210 L250 350" /><circle cx="250" cy="135" r="3" /><circle cx="335" cy="210" r="3" /><circle cx="165" cy="210" r="3" /><circle cx="250" cy="285" r="3" /></svg><div className="core-node"><Cpu size={35} strokeWidth={1.3} /><strong>CJ<span>_</span></strong><small>CPE PROFESSIONAL</small></div><div className="network-node node-top"><ShieldCheck size={20} /><span>IOT</span></div><div className="network-node node-left"><Network size={20} /><span>NETWORKS</span></div><div className="network-node node-right"><Code2 size={20} /><span>SOFTWARE</span></div><div className="network-node node-bottom"><Terminal size={20} /><span>EMBEDDED</span></div><span className="diagram-coordinate">UNDERSTAND END TO END.<br />BUILD PRACTICAL SOLUTIONS.</span><span className="diagram-version">PROFILE v.01</span></div><div className="terminal"><div className="terminal-bar"><span><i /><i /><i /></span><span>christian@portfolio: ~</span><Terminal size={13} /></div><div className="terminal-body"><p><span>❯</span> cat mindset.txt</p><p className="terminal-output">Understand systems end to end.<br />Keep learning. Build practical technology.</p><p><span>❯</span> <i className="cursor" /></p></div></div></div>
+        <div className="hero-portrait">
+          <img src={professionalPhoto} alt="Christian Jade H. Villaver in professional attire" width="1122" height="1402" fetchPriority="high" />
+        </div>
         <div className="hero-bottom"><a href="#about"><ArrowDown size={14} /> SCROLL TO EXPLORE</a><span>ALWAYS LEARNING. ALWAYS ITERATING.</span></div>
       </section>
       <div className="focus-strip">
