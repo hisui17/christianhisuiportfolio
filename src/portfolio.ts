@@ -1,4 +1,47 @@
-export const contact = { email: "", github: "", linkedin: "" };
+export const contact = {
+  email: 'villaver.christianjade17@gmail.com',
+  mobile: '09946562010',
+  phoneHref: 'tel:+639946562010',
+  facebook: 'https://www.facebook.com/christianhisui',
+  instagram: 'https://www.instagram.com/hisui.chrstn/',
+  github: '',
+  linkedin: 'https://www.linkedin.com/in/christian-jade-villaver-607499420',
+};
+
+export const caseFiles = [
+  {
+    id: 'CASE-001',
+    category: 'DETECTION & MONITORING',
+    title: 'SIEM Threat Detection & Dashboard Build',
+    tools: ['Splunk Enterprise', 'BOTSv2', 'SPL'],
+    description: 'A learning case focused on exploring the BOTSv2 dataset, writing SPL queries to surface indicators of compromise, and building Splunk dashboards with panels, visualizations, and time-range controls.',
+    skills: ['SPL Query Writing', 'Log Correlation', 'Dashboard Design'],
+  },
+  {
+    id: 'CASE-002',
+    category: 'INCIDENT RESPONSE',
+    title: 'Incident Triage, Ticketing & Reporting',
+    tools: ['Incident Reports', 'Ticketing'],
+    description: 'A practice workflow for the work that follows detection: assessing alerts, prioritizing findings, tracking incidents, and writing structured reports that support a clear handoff.',
+    skills: ['Alert Triage', 'Prioritization', 'Incident Reporting'],
+  },
+  {
+    id: 'CASE-003',
+    category: 'NETWORK FORENSICS',
+    title: 'Network Traffic & Packet Analysis',
+    tools: ['Wireshark'],
+    description: 'A learning case covering traffic analysis in Wireshark, display filters, TCP stream inspection, and comparison of baseline traffic with anomalous captures to identify patterns that need attention.',
+    skills: ['Packet Analysis', 'Wireshark Filters', 'Anomaly Detection'],
+  },
+  {
+    id: 'CASE-004',
+    category: 'ADVERSARY INTELLIGENCE',
+    title: 'Honeypot Deployment & Threat Intelligence',
+    tools: ['Kali Linux', 'Cowrie', 'Wireshark'],
+    description: 'A home-lab case exploring an isolated network segment, Cowrie honeypot logging, and correlation of session activity with Wireshark captures to connect application events with network evidence.',
+    skills: ['Honeypot Configuration', 'Network Segmentation', 'Threat Analysis'],
+  },
+];
 
 type Project = {
   title: string;
@@ -88,11 +131,13 @@ export const skillGroups = [
   ['DATABASE / BACKEND', ['Firebase Authentication', 'Firestore']],
   ['EMBEDDED SYSTEMS & IOT', ['ESP8266', 'ESP32-C3', 'Microcontrollers', 'Sensors', 'ESP-NOW', 'IoT', 'Automation']],
   ['PROFESSIONAL SKILLS', ['Problem solving', 'Technical communication', 'Troubleshooting', 'Continuous learning']],
+  ['CYBERSECURITY / SECURITY OPERATIONS', ['VirusTotal', 'AbuseIPDB', 'Shodan', 'Wireshark', 'Splunk', 'Kali Linux', 'SIEM Fundamentals', 'Honeypot Labs', 'Splunk BOTS v2']],
 ] as const;
 
 export const certifications: {
   title: string;
   issuer: string;
+  description: string;
   issued: string;
   issuedLabel: string;
   badge: string;
@@ -101,6 +146,7 @@ export const certifications: {
   {
     title: 'CCNA: Enterprise Networking, Security, and Automation',
     issuer: 'Cisco',
+    description: 'Covers enterprise network architecture, security concepts, network automation, and technologies used to manage and secure modern networks.',
     issued: '2026-08-24',
     issuedLabel: 'August 2026',
     badge: 'ccna-ensa.png',
@@ -108,6 +154,7 @@ export const certifications: {
   {
     title: 'CCNA: Introduction to Networks',
     issuer: 'Cisco',
+    description: 'Introduces core networking concepts including network models, Ethernet, IP addressing, basic device configuration, and fundamental network communication.',
     issued: '2026-08-19',
     issuedLabel: 'August 2026',
     badge: 'ccna-itn.png',
@@ -115,6 +162,7 @@ export const certifications: {
   {
     title: 'CCNA: Switching, Routing, and Wireless Essentials',
     issuer: 'Cisco',
+    description: 'Focuses on switching, VLANs, routing fundamentals, wireless networking, and practical configuration of small to medium-sized networks.',
     issued: '2026-08-24',
     issuedLabel: 'August 2026',
     badge: 'ccna-srwe.png',

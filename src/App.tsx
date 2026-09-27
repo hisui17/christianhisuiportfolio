@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, ChevronDown, Code2, Github, Globe2, Linkedin, Mail, Menu, Network, ShieldCheck, Terminal, X } from 'lucide-react';
-import { certifications, contact, labs, projects, skillGroups } from './portfolio';
+import { ArrowDown, ArrowRight, ArrowUpRight, ChevronDown, Code2, Facebook, Github, Globe2, Instagram, Linkedin, Mail, Menu, Network, Phone, ShieldCheck, Terminal, X } from 'lucide-react';
+import { caseFiles, certifications, contact, labs, projects, skillGroups } from './portfolio';
 import IntroSplash from './components/IntroSplash';
 import professionalPhoto from './assets/profile/professional-photo.png';
 
-const navigation = ['about', 'projects', 'labs', 'skills', 'certifications', 'contact'];
+const navigation = ['about', 'projects', 'case-files', 'labs', 'skills', 'certifications', 'contact'];
 const certificationBadges = import.meta.glob<string>('./assets/certifications/*.png', {
   eager: true,
   query: '?url',
@@ -39,12 +39,14 @@ function App() {
     let frame = 0;
     const root = document.documentElement;
     const previousOffset = root.style.getPropertyValue('--navigation-offset');
+    const previousHeight = root.style.getPropertyValue('--navigation-height');
 
     const update = () => {
       frame = 0;
       const scrollTop = Math.max(0, window.scrollY);
       const offset = header.offsetHeight + 16;
       root.style.setProperty('--navigation-offset', `${offset}px`);
+      root.style.setProperty('--navigation-height', `${header.offsetHeight}px`);
       setNavbarVisible(scrollTop > 0);
       if (scrollTop === 0) setMenuOpen(false);
 
@@ -78,6 +80,8 @@ function App() {
       window.cancelAnimationFrame(frame);
       if (previousOffset) root.style.setProperty('--navigation-offset', previousOffset);
       else root.style.removeProperty('--navigation-offset');
+      if (previousHeight) root.style.setProperty('--navigation-height', previousHeight);
+      else root.style.removeProperty('--navigation-height');
     };
   }, []);
   useEffect(() => {
@@ -92,7 +96,20 @@ function App() {
       }
     };
     window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
+    const closeOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !headerRef.current?.contains(event.target)) setMenuOpen(false);
+    };
+    const desktop = window.matchMedia('(min-width: 1201px)');
+    const closeOnDesktop = () => {
+      if (desktop.matches) setMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', closeOutside);
+    desktop.addEventListener('change', closeOnDesktop);
+    return () => {
+      window.removeEventListener('keydown', close);
+      document.removeEventListener('pointerdown', closeOutside);
+      desktop.removeEventListener('change', closeOnDesktop);
+    };
   }, [menuOpen]);
 
   return <div className="site-shell">
@@ -101,7 +118,7 @@ function App() {
     <a className="skip-link" href="#main">Skip to content</a>
     <header ref={headerRef} className={`topbar ${navbarVisible ? 'topbar-visible' : ''}`} aria-hidden={!navbarVisible}>
       <a className="brand" href="#home" onClick={() => setMenuOpen(false)} aria-current={activeSection === 'home' ? 'location' : undefined} aria-label="Christian Jade Villaver home"><span className="brand-mark">cj<span>.</span></span><span>CHRISTIAN JADE<br /><small>VILLAVER / CPE PROFESSIONAL</small></span></a>
-      <nav id="main-navigation" className={`nav-links ${menuOpen ? 'open' : ''}`} aria-label="Main navigation">{navigation.map((item) => <a key={item} href={`#${item}`} className={activeSection === item ? 'active' : ''} aria-current={activeSection === item ? 'location' : undefined} onClick={() => setMenuOpen(false)}>{item === 'labs' ? 'Experience' : item}</a>)}</nav>
+      <nav id="main-navigation" className={`nav-links ${menuOpen ? 'open' : ''}`} aria-label="Main navigation">{navigation.map((item) => <a key={item} href={`#${item}`} className={activeSection === item ? 'active' : ''} aria-current={activeSection === item ? 'location' : undefined} onClick={() => setMenuOpen(false)}>{item === 'labs' ? 'Experience' : item === 'case-files' ? 'Case Files' : item}</a>)}</nav>
       <a href="#contact" className="header-contact">Let’s connect <ArrowUpRight size={15} /></a>
       <button id="menu-toggle" className="menu-toggle" aria-expanded={menuOpen} aria-controls="main-navigation" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
     </header>
@@ -157,11 +174,28 @@ function App() {
         if (filter !== 'All' && filter !== categories[index]) return null;
         return <article className="project-card" key={project.title}><div className={`project-art ${className}`} aria-hidden="true"><div className="art-grid" /><span className="art-id">CJ / 0{index + 1}</span><div className="art-symbol"><Icon size={45} strokeWidth={1} /></div><span className="art-label">{label}</span><span className="art-corner">+</span></div><div className="project-content"><div className="card-top"><span>{project.category}</span><span className={`project-status ${project.status === 'IN PROGRESS' ? 'in-progress' : ''}`}><span />{project.status}</span></div><h3>{project.title}</h3><p>{project.description}</p><div className="tag-row">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><details className="project-details"><summary>Scope &amp; context <ChevronDown size={16} /></summary><div><p>{project.scope}</p><p className="publication-note">Practical projects and continued technical learning.</p></div></details></div></article>;
       })}</div></section>
-      <section id="labs" className="section-wrap"><div className="section-heading"><div><Label number="03">EXPERIENCE &amp; LEARNING</Label><h2>Across disciplines.<br /><span>Deeper understanding.</span></h2></div><p>IT support experience and technical projects.<br />Networking and cybersecurity skills in development.</p></div><div className="lab-list">{labs.map((lab, index) => <details className="lab-row" key={lab.title}><summary><span className="lab-number">0{index + 1}</span><span className="lab-title">{lab.title}<small>{lab.category}</small></span><span className="lab-state">{lab.status}</span><ChevronDown size={19} /></summary><div className="lab-description"><p>{lab.description}</p>{lab.responsibilities && <ul>{lab.responsibilities.map((responsibility) => <li key={responsibility}>• {responsibility}</li>)}</ul>}<span>FOCUS / {lab.tools}</span><p className="publication-note">Part of my ongoing technical development.</p></div></details>)}</div></section>
-      <section id="skills" className="section-wrap"><div className="section-heading"><div><Label number="04">TOOLS OF THE TRADE</Label><h2>A growing <span>toolkit.</span></h2></div><p>Hands-on technical exposure, with networking<br />and cybersecurity foundations in development.</p></div><div className="skills-grid">{skillGroups.map(([group, skills], index) => <div className="skill-group" key={group}><span className="skill-index">0{index + 1} /</span><h3>{group}</h3><div>{skills.map((skill) => <span className="skill-chip" key={skill}>{skill}</span>)}</div></div>)}</div><div className="learning-line"><span className="status-dot" /><span>CURRENTLY EXPLORING</span><p>Networking &amp; IT infrastructure <b>/</b> Cybersecurity <b>/</b> Software <b>/</b> Embedded systems &amp; IoT <b>/</b> Emerging technologies</p></div></section>
+      <section id="case-files" className="section-wrap" aria-labelledby="case-files-heading">
+        <div className="section-heading">
+          <div><Label number="03">CYBERSECURITY LEARNING</Label><h2 id="case-files-heading">Case <span>Files.</span></h2></div>
+          <p>Practice scenarios and technical exploration.<br />Building foundations in cybersecurity.</p>
+        </div>
+        <div className="case-files-grid">
+          {caseFiles.map((caseFile) => (
+            <article className="project-card case-file-card" key={caseFile.id}>
+              <p className="case-file-meta">{caseFile.id} / {caseFile.category}</p>
+              <h3>{caseFile.title}</h3>
+              <div className="tag-row case-file-tools">{caseFile.tools.map((tool) => <span key={tool}>{tool}</span>)}</div>
+              <p className="case-file-description">{caseFile.description}</p>
+              <div className="tag-row case-file-skills">{caseFile.skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section id="labs" className="section-wrap"><div className="section-heading"><div><Label number="04">EXPERIENCE &amp; LEARNING</Label><h2>Across disciplines.<br /><span>Deeper understanding.</span></h2></div><p>IT support experience and technical projects.<br />Networking and cybersecurity skills in development.</p></div><div className="lab-list">{labs.map((lab, index) => <details className="lab-row" key={lab.title}><summary><span className="lab-number">0{index + 1}</span><span className="lab-title">{lab.title}<small>{lab.category}</small></span><span className="lab-state">{lab.status}</span><ChevronDown size={19} /></summary><div className="lab-description"><p>{lab.description}</p>{lab.responsibilities && <ul>{lab.responsibilities.map((responsibility) => <li key={responsibility}>• {responsibility}</li>)}</ul>}<span>FOCUS / {lab.tools}</span><p className="publication-note">Part of my ongoing technical development.</p></div></details>)}</div></section>
+      <section id="skills" className="section-wrap"><div className="section-heading"><div><Label number="05">TOOLS OF THE TRADE</Label><h2>A growing <span>toolkit.</span></h2></div><p>Hands-on technical exposure, with networking<br />and cybersecurity foundations in development.</p></div><div className="skills-grid">{skillGroups.map(([group, skills], index) => <div className="skill-group" key={group}><span className="skill-index">0{index + 1} /</span><h3>{group}</h3><div>{skills.map((skill) => <span className="skill-chip" key={skill}>{skill}</span>)}</div></div>)}</div><div className="learning-line"><span className="status-dot" /><span>CURRENTLY EXPLORING</span><p>Networking &amp; IT infrastructure <b>/</b> Cybersecurity <b>/</b> Software <b>/</b> Embedded systems &amp; IoT <b>/</b> Emerging technologies</p></div></section>
       <section id="certifications" className="section-wrap">
         <div className="section-heading">
-          <div><Label number="05">CERTIFICATIONS & TRAINING</Label><h2>Certifications &amp; <span>training.</span></h2></div>
+          <div><Label number="06">CERTIFICATIONS & TRAINING</Label><h2>Certifications &amp; <span>training.</span></h2></div>
         </div>
         <div className="certification-grid">
           {certifications.map((credential) => {
@@ -171,6 +205,7 @@ function App() {
                 {badge && <div className="certification-badge"><img src={badge} alt={credential.title + ' Cisco badge'} width="128" height="128" loading="lazy" /></div>}
                 <h3>{credential.title}</h3>
                 <p>{credential.issuer}</p>
+                <p className="certification-description">{credential.description}</p>
                 <p className="certification-issued">Issued <time dateTime={credential.issued}>{credential.issuedLabel}</time></p>
                 {credential.credentialUrl && <a className="text-link" href={credential.credentialUrl} target="_blank" rel="noreferrer">View Credential <ArrowUpRight size={16} /></a>}
               </div>
@@ -178,7 +213,7 @@ function App() {
           })}
         </div>
       </section>
-      <section id="contact" className="section-wrap contact-section"><div><Label number="06">WHAT’S NEXT?</Label><h2>Let’s build<br /><span>practical technology.</span></h2><p>I’m currently open to entry-level opportunities where I can apply my Computer Engineering background, contribute to technical teams, and continue developing my skills across IT, networking, software, embedded systems, and cybersecurity.</p>{contact.email ? <a className="button primary" href={`mailto:${contact.email}`}>Let’s talk <ArrowUpRight size={18} /></a> : <p className="contact-pending"><Mail size={17} /> Contact details will be available here soon.</p>}</div><div className="contact-aside"><span className="availability"><span className="status-dot" /> OPEN TO WORK</span><p>Based in the Philippines.<br />Ready for the next challenge.</p><div className="social-links">{contact.github && <a href={contact.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub <ArrowUpRight size={16} /></a>}{contact.linkedin && <a href={contact.linkedin} target="_blank" rel="noreferrer"><Linkedin size={18} /> LinkedIn <ArrowUpRight size={16} /></a>}</div></div></section>
+      <section id="contact" className="section-wrap contact-section"><div><Label number="07">WHAT’S NEXT?</Label><h2>Let’s build<br /><span>practical technology.</span></h2><p>I’m currently open to entry-level opportunities where I can apply my Computer Engineering background, contribute to technical teams, and continue developing my skills across IT, networking, software, embedded systems, and cybersecurity.</p>{contact.email ? <a className="button primary" href={`mailto:${contact.email}`}>Let’s talk <ArrowUpRight size={18} /></a> : <p className="contact-pending"><Mail size={17} /> Contact details will be available here soon.</p>}</div><div className="contact-aside"><span className="availability"><span className="status-dot" /> OPEN TO WORK</span><p>Based in the Philippines.<br />Ready for the next challenge.</p><div className="social-links contact-direct"><a href={`mailto:${contact.email}`}><Mail size={18} /><span>{contact.email}</span></a><a href={contact.phoneHref}><Phone size={18} />{contact.mobile}</a></div><div className="social-links"><a href={contact.facebook} target="_blank" rel="noreferrer"><Facebook size={18} />Facebook <ArrowUpRight size={16} /></a><a href={contact.instagram} target="_blank" rel="noreferrer"><Instagram size={18} />hisui.chrstn <ArrowUpRight size={16} /></a>{contact.github && <a href={contact.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub <ArrowUpRight size={16} /></a>}{contact.linkedin && <a href={contact.linkedin} target="_blank" rel="noreferrer"><Linkedin size={18} /> LinkedIn <ArrowUpRight size={16} /></a>}</div></div></section>
     </main>
     <footer className="footer section-wrap"><a className="brand-mark" href="#home" aria-label="Back to top">cj<span>.</span></a><span>© {new Date().getFullYear()} Christian Jade Villaver</span><span>BUILT WITH CURIOSITY & PURPOSE</span><a href="#home">Back to top <ArrowUpRight size={14} /></a></footer>
   </div>;
