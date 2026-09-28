@@ -88,6 +88,18 @@ function App() {
     headerRef.current?.toggleAttribute('inert', !navbarVisible);
   }, [navbarVisible]);
   useEffect(() => {
+    const nav = document.getElementById('main-navigation');
+    const dropdown = window.matchMedia('(max-width: 1200px)');
+    // Closed links must stop accepting focus immediately, even during fade-out.
+    const updateInteraction = () => nav?.toggleAttribute('inert', dropdown.matches && !menuOpen);
+    updateInteraction();
+    dropdown.addEventListener('change', updateInteraction);
+    return () => {
+      dropdown.removeEventListener('change', updateInteraction);
+      nav?.removeAttribute('inert');
+    };
+  }, [menuOpen]);
+  useEffect(() => {
     if (!menuOpen) return;
     const close = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -186,6 +198,10 @@ function App() {
               <h3>{caseFile.title}</h3>
               <div className="tag-row case-file-tools">{caseFile.tools.map((tool) => <span key={tool}>{tool}</span>)}</div>
               <p className="case-file-description">{caseFile.description}</p>
+              {caseFile.screenshot && <a className="case-file-preview" href={caseFile.screenshot} target="_blank" rel="noopener noreferrer">
+                <img src={caseFile.screenshot} alt={caseFile.screenshotAlt} width="1841" height="1018" loading="lazy" decoding="async" />
+                <span>View full-size dashboard <ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></span>
+              </a>}
               <div className="tag-row case-file-skills">{caseFile.skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
             </article>
           ))}

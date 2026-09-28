@@ -1,3 +1,5 @@
+import botsDashboard from './assets/case-files/bots-v2-security-overview.png';
+
 export const contact = {
   email: 'villaver.christianjade17@gmail.com',
   mobile: '09946562010',
@@ -11,6 +13,8 @@ export const contact = {
 export const caseFiles = [
   {
     id: 'CASE-001',
+    screenshot: botsDashboard,
+    screenshotAlt: 'BOTS v2 Security Overview dashboard showing event totals, HTTP errors, source IPs, event volume, and traffic breakdowns.',
     category: 'DETECTION & MONITORING',
     title: 'SIEM Threat Detection & Dashboard Build',
     tools: ['Splunk Enterprise', 'BOTSv2', 'SPL'],
@@ -166,5 +170,21 @@ export const certifications: {
     issued: '2026-08-24',
     issuedLabel: 'August 2026',
     badge: 'ccna-srwe.png',
+  },
+  {
+    title: 'Network Defense',
+    issuer: 'Cisco',
+    description: 'Cisco training credential in network defense.',
+    issued: '2026-05-10',
+    issuedLabel: 'May 2026',
+    badge: 'network-defense.png',
+  },
+  {
+    title: 'Ethical Hacker',
+    issuer: 'Cisco',
+    description: 'Cisco training credential in ethical hacking.',
+    issued: '2025-12-24',
+    issuedLabel: 'December 2025',
+    badge: 'ethical-hacker.png',
   },
 ];

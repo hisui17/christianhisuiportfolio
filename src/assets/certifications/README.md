@@ -5,6 +5,8 @@ Place the original badge PNG files here with these exact names:
 - `ccna-ensa.png`: CCNA: Enterprise Networking, Security, and Automation
 - `ccna-itn.png`: CCNA: Introduction to Networks
 - `ccna-srwe.png`: CCNA: Switching, Routing, and Wireless Essentials
+- `network-defense.png`: Network Defense
+- `ethical-hacker.png`: Ethical Hacker
 
 The cards automatically include these images on the next build. Missing images
 are omitted, rather than replaced with invented badges. Images use a consistent
